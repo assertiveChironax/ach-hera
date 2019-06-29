@@ -107,8 +107,7 @@ async def gacha(ctx):
 @client.command(name="mom",
                 description="Determines the answer to yes-or-no style questions.",
                 brief="Why do you not ask your Mother?",
-                alias
-                es=["mother", "mommy", "mama", "ma"])
+                aliases=["mother", "mommy", "mama", "ma"])
 async def mom(ctx, *, question):
     possible_responses = [" Yes.", " No.", " Maybe.",
                           " Why do you not ask me later?",]
