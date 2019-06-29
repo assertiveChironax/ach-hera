@@ -101,7 +101,7 @@ async def gacha(ctx):
         dollars = dollars - 1000
         got = random.choice(prize)
         won.append(got)
-        await ctx.send(ctx.author.mention + " You won " + str(got) + ".")
+        await ctx.send(ctx.author.mention + " Rolling. You won " + str(got) + ".")
 
 #Mom   
 @client.command(name="mom",
@@ -134,16 +134,18 @@ async def roulette(ctx):
     if luck == bang:
         luck = random.randint(1,6)
         dollars = dollars - 100
-        await ctx.send(ctx.author.mention + " Bang. Unfortunate- I will be taking $100 to cover your medical expenses.")
+        await ctx.send(ctx.author.mention + " ```Bang!```" +
+                       "\n Unfortunate- I will be taking $100 to cover your medical expenses.")
         return (luck, dollars)
     elif luck != bang:
         luck = luck + 1
         dollars = dollars + 100
-        await ctx.send(ctx.author.mention + " Click. Brave- Here is $100 as a reward.")
+        await ctx.send(ctx.author.mention + " ```Click.```" +
+                       "\n Brave- Here is $100 as a reward.")
         return (luck, dollars)
 
     
 #'Useless' code letting me know the program made it this far.   
-print("Done.")
+print("Done...")
 
 client.run(os.getenv("TOKEN"))
