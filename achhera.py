@@ -148,4 +148,4 @@ async def roulette(ctx):
 #'Useless' code letting me know the program made it this far.   
 print("Done.")
 
-client.run("NTk0MzA3MTc1MTE2MTc3NDM4.XRbm6w.0r9C6XslFfmPQL3X21rMGpwjABA")
+client.run(os.getenv("TOKEN"))
