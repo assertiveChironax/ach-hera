@@ -32,6 +32,19 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online,
                                  activity=discord.Game("ACH Server"))
     print("Summoning.. She's here.")
+
+#Censor code? WIP.
+@client.event
+async def on_message(message):
+    no_no = [ 'fuck', 'fucking', 'fucked',
+                   'shit', 'shitting', 'shits',
+                   'bitch', 'bitching', 'bitches', 'bitched',
+                  'pussy', 'asshole', ]
+    messagez = message.content.split(" ")
+    for word in messagez:
+        if word.lower() in no_no:
+            await message.channel.send("Language.")
+    await client.process_commands(message)
     
 
 #Actual command code translated from old Juno bot to work with
@@ -135,17 +148,6 @@ async def roulette(ctx):
         dollars[member.id] += 100
         await ctx.send(ctx.author.mention + " ```Click.```" +
                        "\n Brave- Here is $100 as a reward.")
-#Censor code? WIP.
-@client.event
-async def on_message(message):
-    no_no = [ 'fuck', 'fucking', 'fucked',
-               'shit', 'shitting', 'shits',
-               'bitch', 'bitching', 'bitches', 'bitched',
-              'pussy', 'asshole', ]
-    messagez = message.content.split(" ")
-    for word in messagez:
-        if word.lower() in no_no:
-            await message.channel.send("Language.")
 
 #'Useless' code letting me know the program made it this far.   
 print("Done...")
