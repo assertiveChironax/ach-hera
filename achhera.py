@@ -1,10 +1,12 @@
 from discord.ext import commands
 import random
 import os
+import discord
+from collections import defaultdict
 
-#Cash
-dollars = 0
-dollars = dollars
+#New Cash + Gachas (Individual)
+dollars = defaultdict(int)
+gachas = defaultdict(str)
 
 #Roulette Values
 luck = random.randint(1,6)
@@ -12,11 +14,12 @@ bang = 6
 luck = luck
 
 #Gacha Values
-won = []
-prize = ["an ares", "an eris", "an eros", "raw beef", "raw pork",
-          "raw fish", "raw chicken", "beans", "chocolate", "beer",
-          "a weed", "a headpat", "a hug", "lint", "pocket sand",
-          "a penny", "a used napkin", "a potato chip"]
+prize = ['an ares', 'an eris', 'an eros', 'raw beef', 'raw pork',
+          'raw fish', 'raw chicken', 'beans', 'chocolate', 'beer',
+          'a weed', 'a headpat', 'a hug', 'lint', 'pocket sand',
+          'a penny', 'a used napkin', 'a potato chip', 'a custom role',
+         'user-color replace']
+
 
 #'Useless' code letting me know the program made it this far.
 print("Loading...")
@@ -30,42 +33,46 @@ async def on_ready():
                                  activity=discord.Game("ACH Server"))
     print("Summoning.. She's here.")
     
-## Censor code? WIP.
-##async def on_message(message):
-##    if message.content.find("fuck") != -1:
-##        await message.channel.send("Watch it.")
-##        print(message.content)
+#Censor code? WIP.
+@client.event
+async def on_message(message):
+    no_no = [ 'fuck', 'fucking', 'fucked',
+               'shit', 'shitting', 'shits',
+               'bitch', 'bitching', 'bitches', 'bitched',
+              'pussy', 'asshole', ]
+    messagez = message.content.split(" ")
+    for word in messagez:
+        if word.lower() in no_no:
+            await message.channel.send("Language.")
 
 #Actual command code translated from old Juno bot to work with
 #new discord.py doc
 
 #Allowance
 @client.command(name="allowance",
-                description="Grants or deducts money from the server.",
+                description="Grants or deducts money from the user.",
                 brief="Here to ask me for currency again?",
                 aliases=["mompls", "mommypls", "mapls", "mamapls", "gibmoni",])
 async def allowance(ctx):
-    global dollars
+    member = ctx.author
     mercy = random.randint(1,3)
     if mercy == 1:
-        dollars = dollars + 100
+        dollars[member.id] += 100
         await ctx.send(ctx.author.mention + " Very well then. Here is $100.")
-        return (dollars)
     if mercy == 2:
         await ctx.send(ctx.author.mention + " Perhaps another time.")
     if mercy == 3:
-        dollars = dollars - 25
+        dollars[member.id] -= 25
         await ctx.send(ctx.author.mention + " You have asked for too much." +
                        "I am taking $25 away from the server.")
-        return (dollars)
     
 #Bank
 @client.command(name="bank",
-                description="Displays the server's saved money.",
+                description="Displays the user's saved money.",
                 brief="Would you like to check the balance?",)
 async def bank(ctx):
-    global dollars
-    await ctx.send(ctx.author.mention + " The server currently has $" + str(dollars) + ".")
+    member = ctx.author
+    await ctx.send(ctx.author.mention + " Your current balance is: ${}".format(dollars[member.id]))
     
 #Choose
 @client.command(name="choose",
@@ -80,27 +87,25 @@ async def choose(ctx, *choices):
                        random.choice(choices) + ".")
 #Collection
 @client.command(name="collection",
-                description="Displays the server's collection of gacha prizes.",
+                description="Displays the user's collection of gacha prizes.",
                 brief="What have you won?",)
 async def collection(ctx):
-    global won
-    await ctx.send(ctx.author.mention + " The server has won: " + str(won) + ".")
-
+    member = ctx.author
+    await ctx.send(ctx.author.mention + " Your current collection is: {}".format(gachas[member.id]))
 #Gacha
 @client.command(name="gacha",
-                description="Spends $1000 to roll the server's gacha ONCE.",
+                description="Spends $1000 to roll the gacha ONCE.",
                 brief="What will you win?",)
 async def gacha(ctx):
-    global dollars
     global prize
-    global won
-    if dollars < 1000:
+    member = ctx.author
+    if dollars[member.id] < 1000:
         await ctx.send(ctx.author.mention +
-                       " The server does not have enough money.")
-    elif dollars >= 1000:
-        dollars = dollars - 1000
+                       " You do not have enough money.")
+    elif dollars[member.id] >= 1000:
+        dollars[member.id] -= 1000
         got = random.choice(prize)
-        won.append(got)
+        gachas[member.id] += (got)
         await ctx.send(ctx.author.mention + " Rolling. You won " + str(got) + ".")
 
 #Mom   
@@ -128,23 +133,20 @@ async def prizes(ctx):
                 brief="Would you like some quick money?",
                 aliases=["rr", "blyat",])
 async def roulette(ctx):
-    global dollars
+    member = ctx.author
     global luck
     global bang
     if luck == bang:
         luck = random.randint(1,6)
-        dollars = dollars - 100
+        dollars[member.id] -= 100
         await ctx.send(ctx.author.mention + " ```Bang!```" +
                        "\n Unfortunate- I will be taking $100 to cover your medical expenses.")
-        return (luck, dollars)
     elif luck != bang:
         luck = luck + 1
-        dollars = dollars + 100
+        dollars[member.id] += 100
         await ctx.send(ctx.author.mention + " ```Click.```" +
                        "\n Brave- Here is $100 as a reward.")
-        return (luck, dollars)
 
-    
 #'Useless' code letting me know the program made it this far.   
 print("Done...")
 
