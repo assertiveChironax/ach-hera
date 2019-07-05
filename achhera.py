@@ -39,7 +39,7 @@ async def on_message(message):
     no_no = [ 'fuck', 'fucking', 'fucked', 'fucks', 
                    'shit', 'shitting', 'shits', 'shitty', 
                    'bitch', 'bitching', 'bitches', 'bitched',
-                  'pussy', 'asshole', 'damn', 'damned']
+                  'pussy', 'asshole', 'damn', 'damned', 'motherfucker', 'motherfucka', ]
     messagez = message.content.split(" ")
     for word in messagez:
         if word.lower() in no_no:
