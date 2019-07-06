@@ -153,7 +153,7 @@ async def gacha(ctx):
         if users[id]['cash'] < 1000:
             await ctx.send(ctx.author.mention +
                        " You do not have enough money.")
-        if users[id]['cash'] > 1000:
+        if users[id]['cash'] >= 1000:
             got = random.choice(prize)
             users[id]['cash'] -= 1000
             users[id]['box'].append(got)
