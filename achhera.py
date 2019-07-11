@@ -13,7 +13,7 @@ prize = ['an ares', 'an eris', 'an eros', 'raw beef', 'raw pork',
           'raw fish', 'raw chicken', 'beans', 'chocolate', 'beer',
           'a weed', 'a headpat', 'a hug', 'lint', 'pocket sand',
           'a penny', 'a used napkin', 'a potato chip', 'a gun', 'a custom role',
-         'user-color replace']
+         'new user-color']
 
 def creator(ctx):
     return ctx.author.id == 220034017959870465
@@ -40,8 +40,6 @@ async def on_member_join(member):
     id = str(message.author.id)
     if not id in users:
         users[id] = {}
-        users[id]['xp'] = 0
-        users[id]['lvl'] = 1
         users[id]['cash'] = 0
         users[id]['box'] = []        
 #Updates .json
@@ -65,21 +63,8 @@ async def on_message(message):
     id = str(message.author.id)  
     if not id in users:
         users[id] = {}
-        users[id]['xp'] = 0
-        users[id]['lvl'] = 1
         users[id]['cash'] = 0
         users[id]['box'] = []
-    if id in users:
-        exp = 5
-        users[id]['xp'] += exp
-        xp = users[id]['xp']
-        lvl_start = users[id]['lvl']
-        lvl_end = int(xp ** (1/4))
-        
-        if lvl_start < lvl_end:
-            await message.channel.send('{} has leveled up to level {}'
-                                       .format(message.author.mention, lvl_end))
-            users[id]['lvl'] = lvl_end
     with open('users.json', 'w') as f:
         json.dump(users, f)
     await client.process_commands(message)
@@ -296,7 +281,7 @@ async def pocketsand(ctx):
         users = json.load(f)
         id = str(ctx.author.id)
         users[id]['box'].append('pocket sand')
-        await ctx.send(ctx.author.mention + " Test command executed.")
+        await ctx.send(ctx.author.mention + " I am not sure what you want with this pocket sand.")
     with open('users.json', 'w') as f:
         json.dump(users, f)
 
@@ -334,6 +319,20 @@ your medical expenses.")
     with open('users.json', 'w') as f:
         json.dump(users, f)
         
+#Test
+@client.command(name="test",
+                decsription="A test command.",
+                brief="A test command.",)
+@commands.check(creator)
+async def test(ctx):
+    with open('users.json', 'r') as f:
+        users = json.load(f)
+        id = str(ctx.author.id)
+        users[id]['cash'] += 1000
+        await ctx.send(ctx.author.mention + " Test command successfully executed.")
+    with open('users.json', 'w') as f:
+        json.dump(users, f)
+
 #'Useless' code letting me know the program made it this far.   
 print("Done...")
 
